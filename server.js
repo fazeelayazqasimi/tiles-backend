@@ -11,7 +11,12 @@ import inventoryRoutes from "./src/routes/inventory.routes.js";
 dotenv.config();
 const app = express();
 
-app.use(cors());
+// CORS configuration
+app.use(cors({
+  origin: process.env.FRONTEND_URL, // frontend live URL from Vercel
+  credentials: true
+}));
+
 app.use(express.json());
 
 app.get("/", (req, res) => res.send("Tiles ERP API Running"));
@@ -22,7 +27,7 @@ app.use("/api/branches", branchRoutes);
 app.use("/api/warehouses", warehouseRoutes);
 app.use("/api/inventory", inventoryRoutes);
 
-// MongoDB connect
+// MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.error("MongoDB Error", err));
